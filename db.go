@@ -4,42 +4,42 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 const (
-	DEFAULT_MAX_IDLE_CONNS = 100
-	DEFAULT_MAX_OPEN_CONNS = 100
+	DEFAULT_MAX_IDLE_CONNS = 10
+	DEFAULT_MAX_OPEN_CONNS = 20
 	DEFAULT_TIMEOUT        = "90s"
-	TIMEOUT_CONNECTION     = time.Second * 20
 )
 
-type Options struct {
-	DriverName     string
-	DataSourceName string
-	DbName         string
-	Timeout        string
-	MaxIdleConns   int
-	MaxOpenConns   int
-}
+type (
+	Options struct {
+		DriverName     string
+		DataSourceName string
+		DbName         string
+		Timeout        string
+		MaxIdleConns   int
+		MaxOpenConns   int
+	}
 
-type Db struct {
-	Options   Options
-	conn      *sql.DB
-	last_time time.Time
-	Timer     *time.Timer
-}
+	Db struct {
+		Options Options
+		conn    *sql.DB
+	}
+)
 
 var connection Db
 
 func CreateConnection(options Options) (*sql.DB, error) {
 	connection = Db{Options: options}
 
-	var timeout string = DEFAULT_TIMEOUT
+	var timeout string
 	if options.Timeout != "" {
 		timeout = options.Timeout
+	} else {
+		timeout = DEFAULT_TIMEOUT
 	}
 
 	conn, err := sql.Open(options.DriverName, fmt.Sprintf("%s/%s?timeout=%s", options.DataSourceName, options.DbName, timeout))
