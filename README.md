@@ -1,5 +1,10 @@
 # Golang database package
 
+Перед использованием необходимо так же подключить драйвер для работы с базой.
+Пример для mysql:
+
+> go get github.com/go-sql-driver/mysql
+
 ### Пример использования
 ```go
 package main
