@@ -44,7 +44,7 @@ func main(){
 	my_func()
 }
 
-func value_2() {
+func my_func() {
 	// в других пакетах или функциях получаем только инстанс, соединение устанавливать не нужно
 	conn, err := db.GetConnection()
 	if err != nil {
